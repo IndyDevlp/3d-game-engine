@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 
 namespace EngineCore {
 
@@ -14,6 +15,10 @@ namespace EngineCore {
 
 		virtual int start(unsigned window_width, unsigned window_height, const char* title);
 		virtual void on_update(){}
+
+	private:
+
+		std::unique_ptr<class Window> m_pWindow;
 
 	};
 
