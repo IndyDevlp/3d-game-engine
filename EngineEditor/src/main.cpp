@@ -1,10 +1,25 @@
 #include <iostream>
-#include <Core/Utilts/test.hpp>
+#include <memory>
 
-int main()
+#include "Core/Application.hpp"
+
+class MyApp : public EngineCore::Application {
+
+	virtual void on_update() override
+	{
+		//std::cout << "Update frame: " << frame++ << std::endl;
+	}
+
+	int frame = 0;
+};
+
+int main(void)
 {
-	
-	Engine3D::sayHello();
+	auto test_app = std::make_unique<MyApp>();
+
+	int returnCode = test_app->start(1024, 768, "My First App");
 
 	std::cin.get();
+
+	return returnCode;
 }
