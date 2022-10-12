@@ -12,7 +12,7 @@ namespace EngineCore {
 	class Window {
 	public:
 
-		using EventCallbackFn = std::function<void(Event&)>;
+		using EventCallbackFn = std::function<void(BaseEvent&)>;
 
 
 		Window(std::string title, const unsigned width, const unsigned height);
@@ -40,7 +40,8 @@ namespace EngineCore {
 			unsigned height;
 			EventCallbackFn eventCallbackFn;
 		};
-
+		
+		
 
 		int init();
 		void shutdown();
