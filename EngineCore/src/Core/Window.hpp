@@ -50,9 +50,6 @@ namespace EngineCore {
 		WindowData m_data;
 
 		float m_background_color[4] = { 1.f, 1.f, 1.f, 0.f };
-
-
-
 	};
 
 }

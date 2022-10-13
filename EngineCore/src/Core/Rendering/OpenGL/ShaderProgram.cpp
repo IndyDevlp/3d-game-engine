@@ -62,6 +62,7 @@ namespace EngineCore {
             m_id = 0;
             glDeleteShader(vertex_shader_id);
             glDeleteShader(fragment_shader_id);
+            m_isCompiled = false;
             return;
         }
         else

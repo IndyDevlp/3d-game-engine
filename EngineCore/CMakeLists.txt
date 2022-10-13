@@ -11,12 +11,15 @@ set(CORE_PUBLIC_INCLUDES
 set(CORE_PRIVATE_INCLUDES
  src/Core/Window.hpp
  src/Core/Rendering/OpenGL/ShaderProgram.hpp
+ src/Core/Rendering/OpenGL/VertexBuffer.hpp
 )
 
 set(CORE_PRIVATE_SOURCES
  src/Core/Application.cpp
  src/Core/Window.cpp
  src/Core/Rendering/OpenGL/ShaderProgram.cpp
+ src/Core/Rendering/OpenGL/VertexBuffer.cpp
+ 
 )
 
 set(CORE_ALL_SOURCES

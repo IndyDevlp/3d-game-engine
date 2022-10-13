@@ -1,6 +1,7 @@
 #include "Core/Window.hpp"
 #include "Core/Log.hpp"
 #include "Core/Rendering/OpenGL/ShaderProgram.hpp"
+#include "Core/Rendering/OpenGL/VertexBuffer.hpp"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -50,6 +51,8 @@ namespace EngineCore {
     GLuint vao;
 
     std::unique_ptr<ShaderProgram> g_pShader_program;
+    std::unique_ptr<VertexBuffer> g_pPoints_vbo;
+    std::unique_ptr<VertexBuffer> g_pColors_vbo;
 
 	Window::Window(std::string title, const unsigned width, const unsigned height)
         : m_data({ std::move(title), width, height })
@@ -145,25 +148,19 @@ namespace EngineCore {
         g_pShader_program = std::make_unique<ShaderProgram>(vertex_shader, fragment_shader);
         if (!g_pShader_program->isCompiled()) return -1;
 
-        GLuint point_vbo = 0;
-        glGenBuffers(1, &point_vbo);
-        glBindBuffer(GL_ARRAY_BUFFER, point_vbo);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(points), points, GL_STATIC_DRAW);
 
-        GLuint color_vbo = 0;
-        glGenBuffers(1, &color_vbo);
-        glBindBuffer(GL_ARRAY_BUFFER, color_vbo);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
+        g_pPoints_vbo = std::make_unique<VertexBuffer>(points, sizeof(points));
+        g_pColors_vbo = std::make_unique<VertexBuffer>(colors, sizeof(colors));
 
         glGenVertexArrays(1, &vao);
         glBindVertexArray(vao);
 
         glEnableVertexAttribArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, point_vbo);
+        g_pPoints_vbo->bind();
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 
         glEnableVertexAttribArray(1);
-        glBindBuffer(GL_ARRAY_BUFFER, color_vbo);
+        g_pColors_vbo->bind();
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 
         return 0;  

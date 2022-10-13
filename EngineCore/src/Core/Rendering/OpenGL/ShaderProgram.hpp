@@ -19,7 +19,7 @@ namespace EngineCore
 		bool isCompiled() const { return m_isCompiled; }
 
 	private:
-		bool m_isCompiled;
+		bool m_isCompiled = false;
 		unsigned m_id = 0;
 	};
 }
