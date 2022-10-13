@@ -10,18 +10,27 @@ set(CORE_PUBLIC_INCLUDES
 
 set(CORE_PRIVATE_INCLUDES
  src/Core/Window.hpp
+ src/Core/Rendering/OpenGL/ShaderProgram.hpp
 )
 
 set(CORE_PRIVATE_SOURCES
  src/Core/Application.cpp
  src/Core/Window.cpp
+ src/Core/Rendering/OpenGL/ShaderProgram.cpp
+)
+
+set(CORE_ALL_SOURCES
+	${CORE_PUBLIC_INCLUDES}
+	${CORE_PRIVATE_INCLUDES}
+	${CORE_PRIVATE_SOURCES}
+)
+
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES
+	${CORE_ALL_SOURCES}
 )
 
 add_library(${CORE} STATIC 
-	${CORE_PUBLIC_INCLUDES}
-	
-	${CORE_PRIVATE_INCLUDES}
-	${CORE_PRIVATE_SOURCES}
+	${CORE_ALL_SOURCES}
 )
 
 target_include_directories(${CORE} PUBLIC include)
