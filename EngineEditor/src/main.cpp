@@ -17,7 +17,7 @@ int main(void)
 {
 	auto test_app = std::make_unique<MyApp>();
 
-	int returnCode = test_app->start(1024, 768, "My First App");
+	int returnCode = test_app->start(1024, 768, "Guncle Engine");
 
 	std::cin.get();
 

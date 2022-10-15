@@ -13,6 +13,7 @@ set(CORE_PRIVATE_INCLUDES
  src/Core/Rendering/OpenGL/ShaderProgram.hpp
  src/Core/Rendering/OpenGL/VertexBuffer.hpp
  src/Core/Rendering/OpenGL/VertexArray.hpp
+ src/Core/Rendering/OpenGL/IndexBuffer.hpp
 )
 
 set(CORE_PRIVATE_SOURCES
@@ -21,6 +22,7 @@ set(CORE_PRIVATE_SOURCES
  src/Core/Rendering/OpenGL/ShaderProgram.cpp
  src/Core/Rendering/OpenGL/VertexBuffer.cpp
  src/Core/Rendering/OpenGL/VertexArray.cpp
+ src/Core/Rendering/OpenGL/IndexBuffer.cpp
 )
 
 set(CORE_ALL_SOURCES

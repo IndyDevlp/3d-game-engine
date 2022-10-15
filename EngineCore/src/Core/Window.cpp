@@ -3,6 +3,7 @@
 #include "Core/Rendering/OpenGL/ShaderProgram.hpp"
 #include "Core/Rendering/OpenGL/VertexBuffer.hpp"
 #include "Core/Rendering/OpenGL/VertexArray.hpp"
+#include "Core/Rendering/OpenGL/IndexBuffer.hpp"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -18,22 +19,15 @@ namespace EngineCore {
 
     static bool s_GLFW_initialized = false;
 
-    GLfloat points[] = {
-        0.0f,   0.5f,  0.0f,
-        0.5f,  -0.5f,  0.0f,
-       -0.5f,  -0.5f,  0.0f
-    };
-
-    GLfloat colors[] = {
-        1.0f, 0.0f, 0.0f,
-        0.0f, 1.0f, 0.0f,
-        0.0f, 0.0f, 1.0f
-    };
-
     GLfloat positions_colors[] = {
-           0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 1.0f,
-           0.0f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,
-          -0.5f, -0.5f, 0.0f,   1.0f, 0.0f, 1.0f
+      -0.5f, -0.5f, 0.0f,   1.0f, 0.0f, 0.0f,
+       0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,
+      -0.5f,  0.5f, 0.0f,   0.0f, 0.0f, 1.0f,
+       0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 1.0f,
+    };
+
+    GLuint indices[] = {
+        0, 1, 2, 3, 2, 1
     };
 
     const char* vertex_shader =
@@ -58,12 +52,10 @@ namespace EngineCore {
     GLuint vao;
 
     std::unique_ptr<ShaderProgram> g_pShader_program;
-    std::unique_ptr<VertexBuffer> g_pPoints_vbo;
-    std::unique_ptr<VertexBuffer> g_pColors_vbo;
-    std::unique_ptr<VertexArray> g_vao_2buffer;
+    std::unique_ptr<IndexBuffer> g_pIndex_buffer;
 
     std::unique_ptr<VertexBuffer> g_pPositions_colors_vbo;
-    std::unique_ptr<VertexArray> g_vao_1buffer;
+    std::unique_ptr<VertexArray> g_pVAO;
 
 	Window::Window(std::string title, const unsigned width, const unsigned height)
         : m_data({ std::move(title), width, height })
@@ -159,19 +151,6 @@ namespace EngineCore {
         g_pShader_program = std::make_unique<ShaderProgram>(vertex_shader, fragment_shader);
         if (!g_pShader_program->isCompiled()) return -1;
 
-        BufferLayout buffer_layout_1vec3
-        {
-            ShaderDataType::Float3
-        };
-
-        g_vao_2buffer = std::make_unique<VertexArray>();
-        g_pPoints_vbo = std::make_unique<VertexBuffer>(points, sizeof(points), buffer_layout_1vec3);
-        g_pColors_vbo = std::make_unique<VertexBuffer>(colors, sizeof(colors), buffer_layout_1vec3);
-
-        g_vao_2buffer->add_buffer(*g_pPoints_vbo);
-        g_vao_2buffer->add_buffer(*g_pColors_vbo);
-
-        //***
 
         BufferLayout buffer_layout_2vec3
         {
@@ -179,10 +158,12 @@ namespace EngineCore {
             ShaderDataType::Float3
         };
 
-        g_vao_1buffer = std::make_unique<VertexArray>();
+        g_pVAO = std::make_unique<VertexArray>();
         g_pPositions_colors_vbo = std::make_unique<VertexBuffer>(positions_colors, sizeof(positions_colors), buffer_layout_2vec3);
+        g_pIndex_buffer = std::make_unique<IndexBuffer>(indices, sizeof(indices) / sizeof(GLuint));
 
-        g_vao_1buffer->add_buffer(*g_pPositions_colors_vbo);
+        g_pVAO->add_vertex_buffer(*g_pPositions_colors_vbo);
+        g_pVAO->set_index_buffer(*g_pIndex_buffer);
 
         return 0;  
 	}
@@ -198,7 +179,10 @@ namespace EngineCore {
         glClearColor(m_background_color[0], m_background_color[1], m_background_color[2], m_background_color[3]);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        g_pShader_program->bind();
+        g_pVAO->bind();
 
+        glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(g_pVAO->get_indices_count()), GL_UNSIGNED_INT, nullptr);
         
         ImGuiIO& io = ImGui::GetIO();
         io.DisplaySize.x = static_cast<float>(get_width());
@@ -212,22 +196,6 @@ namespace EngineCore {
 
         ImGui::Begin("Background Color Window");
             ImGui::ColorEdit4("Background Color", m_background_color);
-            static bool use_2_buffer = true;
-            ImGui::Checkbox("2 buffers", &use_2_buffer);
-
-            if (use_2_buffer)
-            {
-                g_pShader_program->bind();
-                g_vao_2buffer->bind();
-                glDrawArrays(GL_TRIANGLES, 0, 3);
-            }
-            else
-            {
-                g_pShader_program->bind();
-                g_vao_1buffer->bind();
-                glDrawArrays(GL_TRIANGLES, 0, 3);
-            }
-
 
         ImGui::End();
 
