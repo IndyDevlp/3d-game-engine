@@ -6,6 +6,7 @@ set(CORE_PUBLIC_INCLUDES
  include/Core/Application.hpp
  include/Core/Log.hpp
  include/Core/Event.hpp
+ include/Core/Camera.hpp
 )
 
 set(CORE_PRIVATE_INCLUDES
@@ -19,6 +20,7 @@ set(CORE_PRIVATE_INCLUDES
 set(CORE_PRIVATE_SOURCES
  src/Core/Application.cpp
  src/Core/Window.cpp
+ src/Core/Camera.cpp
  src/Core/Rendering/OpenGL/ShaderProgram.cpp
  src/Core/Rendering/OpenGL/VertexBuffer.cpp
  src/Core/Rendering/OpenGL/VertexArray.cpp
@@ -51,6 +53,9 @@ target_link_libraries(${CORE} PRIVATE spdlog)
 
 add_subdirectory(../external/glad ${CMAKE_CURRENT_BINARY_DIR}/glad)
 target_link_libraries(${CORE} PRIVATE glad)
+
+add_subdirectory(../external/glm ${CMAKE_CURRENT_BINARY_DIR}/glm)
+target_link_libraries(${CORE} PRIVATE glm)
 
 
 set(IMGUI_INCLUDES
