@@ -30,6 +30,12 @@ namespace EngineCore {
         0.0f, 0.0f, 1.0f
     };
 
+    GLfloat positions_colors[] = {
+           0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 1.0f,
+           0.0f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,
+          -0.5f, -0.5f, 0.0f,   1.0f, 0.0f, 1.0f
+    };
+
     const char* vertex_shader =
         "#version 460\n"
         "layout(location = 0) in vec3 vertex_position;"
@@ -54,8 +60,10 @@ namespace EngineCore {
     std::unique_ptr<ShaderProgram> g_pShader_program;
     std::unique_ptr<VertexBuffer> g_pPoints_vbo;
     std::unique_ptr<VertexBuffer> g_pColors_vbo;
+    std::unique_ptr<VertexArray> g_vao_2buffer;
 
-    std::unique_ptr<VertexArray> g_pVAO;
+    std::unique_ptr<VertexBuffer> g_pPositions_colors_vbo;
+    std::unique_ptr<VertexArray> g_vao_1buffer;
 
 	Window::Window(std::string title, const unsigned width, const unsigned height)
         : m_data({ std::move(title), width, height })
@@ -151,14 +159,30 @@ namespace EngineCore {
         g_pShader_program = std::make_unique<ShaderProgram>(vertex_shader, fragment_shader);
         if (!g_pShader_program->isCompiled()) return -1;
 
+        BufferLayout buffer_layout_1vec3
+        {
+            ShaderDataType::Float3
+        };
 
-        g_pPoints_vbo = std::make_unique<VertexBuffer>(points, sizeof(points));
-        g_pColors_vbo = std::make_unique<VertexBuffer>(colors, sizeof(colors));
-        g_pVAO        = std::make_unique<VertexArray>();
+        g_vao_2buffer = std::make_unique<VertexArray>();
+        g_pPoints_vbo = std::make_unique<VertexBuffer>(points, sizeof(points), buffer_layout_1vec3);
+        g_pColors_vbo = std::make_unique<VertexBuffer>(colors, sizeof(colors), buffer_layout_1vec3);
 
+        g_vao_2buffer->add_buffer(*g_pPoints_vbo);
+        g_vao_2buffer->add_buffer(*g_pColors_vbo);
 
-        g_pVAO->add_buffer(*g_pPoints_vbo);
-        g_pVAO->add_buffer(*g_pColors_vbo);
+        //***
+
+        BufferLayout buffer_layout_2vec3
+        {
+            ShaderDataType::Float3,
+            ShaderDataType::Float3
+        };
+
+        g_vao_1buffer = std::make_unique<VertexArray>();
+        g_pPositions_colors_vbo = std::make_unique<VertexBuffer>(positions_colors, sizeof(positions_colors), buffer_layout_2vec3);
+
+        g_vao_1buffer->add_buffer(*g_pPositions_colors_vbo);
 
         return 0;  
 	}
@@ -174,9 +198,7 @@ namespace EngineCore {
         glClearColor(m_background_color[0], m_background_color[1], m_background_color[2], m_background_color[3]);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        g_pShader_program->bind();
-        g_pVAO->bind();
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+
         
         ImGuiIO& io = ImGui::GetIO();
         io.DisplaySize.x = static_cast<float>(get_width());
@@ -190,6 +212,23 @@ namespace EngineCore {
 
         ImGui::Begin("Background Color Window");
             ImGui::ColorEdit4("Background Color", m_background_color);
+            static bool use_2_buffer = true;
+            ImGui::Checkbox("2 buffers", &use_2_buffer);
+
+            if (use_2_buffer)
+            {
+                g_pShader_program->bind();
+                g_vao_2buffer->bind();
+                glDrawArrays(GL_TRIANGLES, 0, 3);
+            }
+            else
+            {
+                g_pShader_program->bind();
+                g_vao_1buffer->bind();
+                glDrawArrays(GL_TRIANGLES, 0, 3);
+            }
+
+
         ImGui::End();
 
         ImGui::Render();
