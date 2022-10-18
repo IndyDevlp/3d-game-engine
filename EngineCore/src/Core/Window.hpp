@@ -48,7 +48,7 @@ namespace EngineCore {
 		GLFWwindow* m_pWindow = nullptr;	
 		WindowData m_data;
 
-		float m_background_color[4] = { .5f, .5f, .5f, 0.f };
+
 	};
 
 }

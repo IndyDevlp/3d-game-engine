@@ -17,7 +17,8 @@ namespace EngineCore {
 			LOG_CRITICAL("Cant load library GLAD");
 			return false;
 		}
-		LOG_INFO("OpenGL context not init");
+
+		LOG_INFO("OpenGL context init");
 		LOG_INFO("	Vendor: {0}", get_vendor_str());
 		LOG_INFO("	Renderer: {0}", get_renderer_str());
 		LOG_INFO("	Version: {0}", get_version_str());

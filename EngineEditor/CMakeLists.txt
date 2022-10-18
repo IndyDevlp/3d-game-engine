@@ -4,7 +4,7 @@ set(EDITOR 3d-game-engine-editor)
 
 add_executable(${EDITOR} src/main.cpp)
 
-target_link_libraries(${EDITOR} 3d-game-engine-core)
+target_link_libraries(${EDITOR} 3d-game-engine-core Imgui glm)
 
 target_compile_features(${EDITOR} PUBLIC cxx_std_17)
 
