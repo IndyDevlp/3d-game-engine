@@ -13,11 +13,11 @@ class MyApp : public EngineCore::Application {
 	int frame = 0;
 };
 
-int main(void)
+int main(int argc, char** argv)
 {
-	auto test_app = std::make_unique<MyApp>();
+	auto Engine_Window = std::make_unique<MyApp>();
 
-	int returnCode = test_app->start(1024, 768, "Keencloo Engine");
+	int returnCode = Engine_Window->start(1024, 768, "Keencloo Engine");
 
 	std::cin.get();
 

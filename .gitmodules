@@ -10,3 +10,6 @@
 [submodule "external/glm"]
 	path = external/glm
 	url = https://github.com/g-truc/glm.git
+[submodule "external/stbi"]
+	path = external/stbi
+	url = https://github.com/nothings/stb.git

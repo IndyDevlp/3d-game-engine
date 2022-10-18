@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
+project(KeenclooEngine)
 
 set(PROJECT_NAME 3d-game-engine)
 

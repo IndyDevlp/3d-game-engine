@@ -5,6 +5,7 @@
 #include <string>
 #include <functional>
 
+
 struct GLFWwindow;
 
 namespace EngineCore {
@@ -41,8 +42,6 @@ namespace EngineCore {
 			EventCallbackFn eventCallbackFn;
 		};
 		
-		
-
 		int init();
 		void shutdown();
 
