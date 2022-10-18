@@ -9,6 +9,7 @@
 #include "Core/Camera.hpp"
 #include "Core/Rendering/OpenGL/Renderer_OpenGL.hpp"
 #include "Core/Modules/UIModule.hpp"
+#include "Core/Input.hpp"
 
 #include <imgui/imgui.h>
 #include <GLFW/glfw3.h>
@@ -99,6 +100,37 @@ namespace EngineCore
 				m_bCloseWindow = true;
 			}
 		);
+
+		m_event_dispatcher.add_event_listener<EventKeyPressed>(
+			[&](EventKeyPressed& event)
+			{
+				if (event.key_code <= KeyCode::KEY_Z)
+				{
+					if (event.repeated)
+					{
+						LOG_INFO("[KeyPressed] KEY - {0}, repeated", static_cast<char>(event.key_code));
+					}
+					else
+					{
+						LOG_INFO("[KeyPressed] KEY - {0}", static_cast<char>(event.key_code));
+					}
+				}
+
+				Input::Presskey(event.key_code);
+			}
+		);
+
+		m_event_dispatcher.add_event_listener<EventKeyReleased>(
+			[&](EventKeyReleased& event)
+			{
+				if (event.key_code <= KeyCode::KEY_Z)
+				{
+					LOG_INFO("[KeyReleased] KEY - {0}", static_cast<char>(event.key_code));
+				}
+
+				Input::ReleaseKey(event.key_code);
+			}
+		);
 			
 		m_pWindow->set_event_callback(
 			[&](BaseEvent& event) {
@@ -167,15 +199,15 @@ namespace EngineCore
 			UIModule::on_ui_draw_begin();
 			bool show = true;
 			UIModule::ShowExampleAppDockSpace(&show);
-			ImGui::Begin("Background Color Window");
-			ImGui::ColorEdit4("Background Color", m_background_color);
-			ImGui::SliderFloat3("scale", scale, 0.f, 2.f);
-			ImGui::SliderFloat("rotate", &rotate, 0.f, 360.f);
-			ImGui::SliderFloat3("translate", translate, -1.f, 1.f);
-			ImGui::SliderFloat3("Camera position", camera_pos, -10.f, 10.f);
-			ImGui::SliderFloat3("Camera rotation", camera_rotation, 0.f, 360.f);
-			ImGui::Checkbox("Perspective camera", &perspective_camera);
-			ImGui::End();
+			//ImGui::Begin("Background Color Window");
+			//ImGui::ColorEdit4("Background Color", m_background_color);
+			//ImGui::SliderFloat3("scale", scale, 0.f, 2.f);
+			//ImGui::SliderFloat("rotate", &rotate, 0.f, 360.f);
+			//ImGui::SliderFloat3("translate", translate, -1.f, 1.f);
+			//ImGui::SliderFloat3("Camera position", camera_pos, -10.f, 10.f);
+			//ImGui::SliderFloat3("Camera rotation", camera_rotation, 0.f, 360.f);
+			//ImGui::Checkbox("Perspective camera", &perspective_camera);
+			//ImGui::End();
 			//***********************************************
 
 			on_ui_draw();

@@ -7,32 +7,31 @@ set(CORE_PUBLIC_INCLUDES
  include/Core/Log.hpp
  include/Core/Event.hpp
  include/Core/Camera.hpp
+ include/Core/Keys.hpp
+ include/Core/Input.hpp
 )
 
 set(CORE_PRIVATE_INCLUDES
  src/Core/Window.hpp
- 
  src/Core/Rendering/OpenGL/ShaderProgram.hpp
  src/Core/Rendering/OpenGL/VertexBuffer.hpp
  src/Core/Rendering/OpenGL/VertexArray.hpp
  src/Core/Rendering/OpenGL/IndexBuffer.hpp
  src/Core/Rendering/OpenGL/Renderer_OpenGL.hpp
- 
  src/Core/Modules/UIModule.hpp
 )
 
 set(CORE_PRIVATE_SOURCES
  src/Core/Application.cpp
  src/Core/Window.cpp
+ src/Core/Input.cpp
  src/Core/Camera.cpp
- 
  src/Core/Rendering/OpenGL/ShaderProgram.cpp
  src/Core/Rendering/OpenGL/VertexBuffer.cpp
  src/Core/Rendering/OpenGL/VertexArray.cpp
  src/Core/Rendering/OpenGL/IndexBuffer.cpp
  src/Core/Rendering/OpenGL/Renderer_OpenGL.cpp
- 
-  src/Core/Modules/UIModule.cpp
+ src/Core/Modules/UIModule.cpp
 )
 
 set(CORE_ALL_SOURCES

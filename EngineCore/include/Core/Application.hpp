@@ -16,7 +16,7 @@ namespace EngineCore {
 		Application(Application&&) = delete;
 		Application operator=(const Application&) = delete;
 		Application operator=(Application&&) = delete;
-		bool set_image(const char** path_to_image);
+		//bool set_image(const char** path_to_image);
 		
 		virtual int start(unsigned window_width, unsigned window_height, const char* title);
 		virtual void on_update() {}
@@ -25,7 +25,7 @@ namespace EngineCore {
 
 		float camera_pos[3] = { 0.f, 0.f, 1.f };
 		float camera_rotation[3] = { 0.f, 0.f, 0.f };
-		bool perspective_camera = false;
+		bool perspective_camera = true;
 		Camera camera;
 
 	private:
