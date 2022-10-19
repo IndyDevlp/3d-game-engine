@@ -118,4 +118,39 @@ namespace EngineCore {
 		static const EventType type = EventType::KeyReleased;
 		KeyCode key_code;
 	};
+
+
+
+	struct EventMouseButtonPressed : public BaseEvent {
+		EventMouseButtonPressed(const MouseButton mouse_button, const double x_pos, const double y_pos)
+			: mouse_button(mouse_button)
+			, x_pos(x_pos)
+			, y_pos(y_pos)
+		{}
+
+		virtual EventType get_type() const override { return type; }
+
+		
+		MouseButton mouse_button;
+		const double x_pos;
+		const double y_pos;
+
+		static const EventType type = EventType::MouseButtonPressed;
+	};
+
+	struct EventMouseButtonReleased : public BaseEvent {
+		EventMouseButtonReleased(const MouseButton mouse_button, const double x_pos, const double y_pos)
+			: mouse_button(mouse_button)
+			, x_pos(x_pos)
+			, y_pos(y_pos)
+		{}
+
+		virtual EventType get_type() const override { return type; }
+
+		MouseButton mouse_button;
+		const double x_pos;
+		const double y_pos;
+
+		static const EventType type = EventType::MouseButtonReleased;
+	};
 }

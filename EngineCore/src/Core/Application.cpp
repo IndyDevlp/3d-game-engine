@@ -21,10 +21,10 @@ namespace EngineCore
 {
 
 	GLfloat positions_colors[] = {
-	  -0.5f, -0.5f, 0.0f,   1.0f, 0.0f, 0.0f,
-	   0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,
-	  -0.5f,  0.5f, 0.0f,   0.0f, 0.0f, 1.0f,
-	   0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 1.0f,
+		0.0f, -0.5f, -0.5f,    1.0f, 0.0f, 0.0f,
+		0.0f,  0.5f, -0.5f,    0.0f, 1.0f, 0.0f,
+		0.0f, -0.5f,  0.5f,    0.0f, 0.0f, 1.0f,
+		0.0f,  0.5f,  0.5f,    1.0f, 0.0f, 1.0f,
 	};
 
 	GLuint indices[] = {
@@ -98,6 +98,26 @@ namespace EngineCore
 			{
 				LOG_INFO("[WindowClose] Closed!");
 				m_bCloseWindow = true;
+			}
+		);
+
+		m_event_dispatcher.add_event_listener<EventMouseButtonPressed>(
+			[&](EventMouseButtonPressed& event)
+			{
+				//LOG_INFO("[Mouse Button Pressed] - {0}, at ({1} {2})", event.mouse_button, event.x_pos, event.y_pos);
+
+				Input::PressMouseButton(event.mouse_button);
+				on_mouse_button_event(event.mouse_button, event.x_pos, event.y_pos, true);
+			}
+		);
+
+		m_event_dispatcher.add_event_listener<EventMouseButtonReleased>(
+			[&](EventMouseButtonReleased& event)
+			{
+				//LOG_INFO("[Mouse Button Released] - {0}, at ({1} {2})", event.mouse_button, event.x_pos, event.y_pos);
+
+				Input::ReleaseMouseButton(event.mouse_button);
+				on_mouse_button_event(event.mouse_button, event.x_pos, event.y_pos, false);
 			}
 		);
 
@@ -186,9 +206,6 @@ namespace EngineCore
 
 			g_pShader_program->setMatrix4("model_matrix", model_matrix);
 
-			camera.set_position_rotation(glm::vec3(camera_pos[0], camera_pos[1], camera_pos[2]),
-				glm::vec3(camera_rotation[0], camera_rotation[1], camera_rotation[2]));
-
 			camera.set_projection_mode(perspective_camera ? Camera::ProjectionMode::Perspective : Camera::ProjectionMode::Orthographic);
 
 			g_pShader_program->setMatrix4("view_projection_matrix", camera.get_projection_matrix() * camera.get_view_matrix());
@@ -221,6 +238,11 @@ namespace EngineCore
 		m_pWindow = nullptr;
 
         return 0;
+	}
+
+	glm::vec2 Application::get_current_cursor_position() const
+	{
+		return m_pWindow->get_current_cursor_position();
 	}
 }
 
